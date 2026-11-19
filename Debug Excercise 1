@@ -1,3 +1,9 @@
+Question: What steps would you take to identify any issues in the code?
+The first thing I would do is check the declarations and make sure every variable is spelled the same way everywhere it shows up. After that, I would walk trhough the program one line at a  time using sample numbers, like 100 and 80, and see if the results match what I expect. Doing that, I found a few problems: there is no input for 
+firstTest before the loop or at the end of it, ouput is misspelled, and firstTest + secondTest /2 only divides secondTest by 2 because of the order of operations.
+Question: What actions could the developer have taken to minimize the number of errors?
+The devloper could have tested the program with sample values while writing it instead of waiting until the end. Reading back through the pseudocode, using consistent names, and having someone else look it over would have caught the typos and missing input statements early on.
+
 start
    Declarations
       num firstTest
@@ -20,3 +26,160 @@ start
       input firstTest
    endwhile
 stop
+
+
+start
+   Declarations
+      string name
+      num hours
+      num rate
+      num DEDUCTION = 45
+      string EOFNAME = "ZZZ"
+      num gross
+      num net
+   output "Enter first name or ", EOFNAME, " to quit"
+   input name
+   while name <> EOFNAME
+      output "Enter hours worked for ", name
+      input hours
+      output "Enter hourly rate for ", name
+      input rate
+      gross = hours * rate
+      net = gross - DEDUCTION
+      if net > 0 then
+         output "Net pay for ", name, " is ", net
+      else
+         output "Deductions not covered. Net is 0."
+      endif
+      output "Enter next name or ", EOFNAME, " to quit"
+      input name
+   endwhile
+   output "End of job"
+stop
+
+Exercise 2: Employee Net Pay
+1. DEDUCTION is declared as a string, but it is used in a calculation, so it should be num.
+2. "if name not equal to EOFNAME" should be a "while" loop. As written, only one employee gets processed. 
+3. "while net > 0 then ... else ... endwhile" Mixes loop and decision syntax. It sahould be "if ...else....endif"
+the real loop needs its own endwhile to close it.
+
+start
+   Declarations
+      string name
+      num hours
+      num rate
+      num DEDUCTION = 45
+      string EOFNAME = "ZZZ"
+      num gross
+      num net
+   output "Enter first name or ", EOFNAME, " to quit"
+   input name
+   while name <> EOFNAME
+      output "Enter hours worked for ", name
+      input hours
+      output "Enter hourly rate for ", name
+      input rate
+      gross = hours * rate
+      net = gross - DEDUCTION
+      if net > 0 then
+         output "Net pay for ", name, " is ", net
+      else
+         output "Deductions not covered. Net is 0."
+      endif
+      output "Enter next name or ", EOFNAME, " to quit"
+      input name
+   endwhile
+   output "End of job"
+stop
+
+Excercise 3: Modularized Net Pay
+Errors found
+1. "EOFNAME =ZZZZ" needs quotes around the value like "ZZZZ"
+2. housekeeping() never has an input name, so name never gets a value
+3. The three while loops are wrong. housekeeping() and finish() should each run once,and only mainLoop() belongs in a loop
+4. gross is used in mainLoop() but never declared
+5.name and EOFNAME are declared in the main program but used inside the modules, so they need toi be global or passed in.
+
+start
+   Declarations
+      string name
+      string EOFNAME = "ZZZZ"
+   housekeeping()
+   while name <> EOFNAME
+      mainLoop()
+   endwhile
+   finish()
+stop
+
+housekeeping()
+   output "Enter first name or ", EOFNAME, " to quit "
+   input name
+return
+
+mainLoop()
+   Declarations
+      num hours
+      num rate
+      num gross
+      num DEDUCTION = 45
+      num net
+   output "Enter hours worked for ", name
+   input hours
+   output "Enter hourly rate for ", name
+   input rate
+   gross = hours * rate
+   net = gross - DEDUCTION
+   if net > 0 then
+      output "Net pay for ", name, " is ", net
+   else
+      output "Deductions not covered. Net is 0."
+   endif
+   output "Enter next name or ", EOFNAME, " to quit "
+   input name
+return
+
+finish()
+   output "End of job"
+return
+
+Exercise 4: COst of Home Ownership
+errors found
+1. startup() is called, but the module is named startUp(). The capitalization does not match.
+2. MainLoop() is called, but the module is named mainLoop(). This is the same king of mismatch.
+3. input mtgPayment does not match the declared variable mortgagePayment.
+4. mainLoop() never ask for the mortgage payment again, so the loop can never end.
+start
+   Declarations
+      num mortgagePayment
+      num utilities
+      num taxes
+      num upkeep
+      num total
+   startUp()
+   while mortgagePayment <> 0
+      mainLoop()
+   endwhile
+   finishUp()
+stop
+
+startUp()
+   output "Enter your mortgage payment or 0 to quit"
+   input mortgagePayment
+return
+
+mainLoop()
+   output "Enter utilities"
+   input utilities
+   output "Enter taxes"
+   input taxes
+   output "Enter amount for upkeep"
+   input upkeep
+   total = mortgagePayment + utilities + taxes + upkeep
+   output "Total is ", total
+   output "Enter your mortgage payment or 0 to quit"
+   input mortgagePayment
+return
+
+finishUp()
+   output "End of program"
+return
